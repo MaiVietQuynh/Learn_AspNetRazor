@@ -1,0 +1,26 @@
+﻿@page "/trang-dau-tien/{solanlap:int?}"
+@model Learn_AspNetRazor.Pages.FirstPageModel
+<h1>@Model.title</h1>
+@*@{
+	ViewData["myData"] = "razorpage 2023";
+}*@
+<h2>@ViewData["myData"]</h2>
+
+@{
+	var solan = this.Request.RouteValues["solanlap"];
+	int solanlap = Convert.ToInt32(solan);
+}
+<p>So lan lap la @solanlap</p>
+@functions {
+	//public void OnGet()
+	//{
+	//	Console.WriteLine("Truy van GET");
+	//	ViewData["myData"] = "razorpage demo 2023";
+	//}
+	////url: ...?handler=Xyz
+	//public void OnGetXyz()
+	//{
+	//	Console.WriteLine("Truy van GET");
+	//	ViewData["myData"] = "razorpage demo 2023 XYZ";
+	//}
+}

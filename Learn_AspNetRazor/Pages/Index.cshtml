@@ -1,0 +1,65 @@
+﻿@page
+@using Learn_AspNetRazor.Models
+@model IndexModel
+@{
+	ViewData["Title"] = "Home page";
+	ViewData["titleMessage"] = "San pham moi";
+	ViewData["content"] = "ban dang xem San pham moi";
+	//Layout = "_MyLayout";
+}
+
+<form method="post">
+	<label>Nhap  ten san pham</label>
+	<input name="username" type="text"/>
+	<input type="submit" value="Gui" />
+</form>
+<div class="text-center">
+	<h1 class="display-4">Welcome</h1>
+	<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+@*
+@section NoidungFooter {
+    <p>Noi dung footer cua trang chu</p>
+}*@
+
+@await Component.InvokeAsync("ProductBox", false)
+@await Html.PartialAsync("_Message")
+@{
+	var product1 = new Product() { Name = "IPhone X", Description = "Dien thoai cua Apple", Price = 1000 };
+	var product2 = new Product() { Name = "Samsung A", Description = "Dien thoai cua Samsung", Price = 3000 };
+	var product3 = new Product() { Name = "Huawwei M", Description = "Dien thoai cua Huawei", Price = 1400 };
+}
+<div class="row bg-info">
+	<div class="col">
+		<partial name="_ProductItem" model="product1" />
+	</div>
+	<div class="col">
+		@await Html.PartialAsync("_ProductItem", product2)
+	</div>
+	<div class="col">
+		@{
+			await Html.RenderPartialAsync("_ProductItem", product3);
+		}
+	</div>
+</div>
+
+<div class="row bg-warning">
+	@{
+	var products = new List<Product>()
+	{
+		new Product() { Name = "San pham 1 ", Description = "Mo ta san pham 1", Price = 1000 },
+		new Product() { Name = "San pham 2 ", Description = "Mo ta san pham 2", Price = 2000 },
+		new Product() { Name = "San pham 3 ", Description = "Mo ta san pham 3", Price = 1500 },
+		new Product() { Name = "San pham 4 ", Description = "Mo ta san pham 4", Price = 600 }
+
+	};
+	foreach(var product in products)
+	{
+		<div class="col">
+				<partial name="_ProductItem" model="product" />
+		</div>
+	}
+}
+</div>
+
+
