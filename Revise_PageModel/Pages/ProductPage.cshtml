@@ -1,0 +1,37 @@
+﻿@page "/product/{id:int?}"
+@model Revise_PageModel.Pages.ProductPageModel
+@{
+	var product = Model.product;
+	var products = Model.productService.AllProducts();
+}
+<h1>@ViewData["title"]</h1>
+<h2>Tong so san pham: @products.Count()</h2>
+@if(product != null)
+{
+	<h2>@product.Name</h2>
+	<p>Mo ta: @product.Description</p>
+	<p>Gia: @product.Price</p>
+	<p>
+		<a asp-page="ProductPage" asp-route-id="">Danh sach san pham</a>
+	</p>
+	<form method="post" asp-page="ProductPage" asp-page-handler="Delete" asp-route-id="@product.Id">
+		<button type="submit" class="btn btn-danger">Xoa </button>
+	</form>
+}
+else
+{
+	<ul>
+		@foreach(var p in products)
+		{
+			<li>
+				<a asp-page="ProductPage" asp-route-id="@p.Id">@p.Name</a>
+			</li>
+		}
+	</ul>
+	<hr />
+	<p>
+		<a class="btn btn-primary" asp-page="ProductPage" asp-page-handler="LastProduct">San pham cuoi</a>
+		<a class="btn btn-danger" asp-page="ProductPage" asp-page-handler="RemoveAll">Xoa tat ca</a>
+		<a class="btn btn-danger" asp-page="ProductPage" asp-page-handler="Load">Nap tat ca sp</a>
+	</p>
+}
