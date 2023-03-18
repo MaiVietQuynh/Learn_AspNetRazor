@@ -2,6 +2,7 @@
 ## @page "url"
 ## Rewrite URL
 ## Tag Helper -> html
+<<<<<<< HEAD
     - @addTagHelper
     - Chuyen het url thanh chu thuong:
       +  services.Configure<RouteOptions>(routeoptions =>
@@ -21,6 +22,20 @@
 ## PageModel: 
      - Chia ra thanh file .cs .cshtml
      - .cs: ke thua tu PageModel
+=======
+- @addTagHelper
+- Chuyen het url thanh chu thuong:
+    services.Configure<RouteOptions>(routeoptions =>
+            {
+                routeoptions.LowercaseUrls= true;
+            });
+## ViewData["myData"]
+## handler: 
+    - Onget(), OnPost
+## PageModel: 
+ - Chia ra thanh file .cs .cshtml
+ - .cs: ke thua tu PageModel
+>>>>>>> 42c36bbdb74cc6bac24532481ba22f89ea05c947
 ## Layout:
     - Co dau _ de endpointrouting khong dung file do lam diem endpoint
     - Bo cuc chung cua trang(header, footer, menu,...)
