@@ -12,9 +12,6 @@
         + Nap: @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
         + Huy: @removeTagHelper Microsoft.AspNetCore.Mvc.TagHelpers.AnchorTagHelper, Microsoft.AspNetCore.Mvc.TagHelpers
                Them dau ! truoc ten the
-    - Xay dung TagHelper rieng:
-        + Xay dung class ke thua tu tagHelper
-        + Nap chong phuong thuc Process
 ## ViewData["myData"]
 ## Handler: 
     - Onget(), OnPost
