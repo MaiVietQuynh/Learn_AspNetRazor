@@ -12,7 +12,7 @@
 	- Inject cac dich vu vao PageModel
 	- Tao trang Razor bang lenh: dotnet new page -h
 	- Tham so cua handler: tu dong duoc thiet lap dua tren gia tri truyen toi(tu cac form post du lieu, cac url, cac query,..)
-##Model Binding
+## Model Binding
 	- Co che lien ket du lieu
 	- Du lieu gui den co dang: Key-Value
 	- Nguon: 
