@@ -1,14 +1,13 @@
 # Learn_AspNetRazor
 ## @page "url"
 ## Rewrite URL
+      - Chuyen het url thanh chu thuong:
+        + services.Configure<RouteOptions>(routeoptions =>
+          {
+                routeoptions.LowercaseUrls= true;
+          });
 ## Tag Helper -> html
-<<<<<<< HEAD
     - @addTagHelper
-    - Chuyen het url thanh chu thuong:
-      +  services.Configure<RouteOptions>(routeoptions =>
-                {
-                    routeoptions.LowercaseUrls= true;
-                });
     - Nap va huy Tag Helper:
         + Nap: @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
         + Huy: @removeTagHelper Microsoft.AspNetCore.Mvc.TagHelpers.AnchorTagHelper, Microsoft.AspNetCore.Mvc.TagHelpers
@@ -22,13 +21,6 @@
 ## PageModel: 
      - Chia ra thanh file .cs .cshtml
      - .cs: ke thua tu PageModel
-=======
-- @addTagHelper
-- Chuyen het url thanh chu thuong:
-    services.Configure<RouteOptions>(routeoptions =>
-            {
-                routeoptions.LowercaseUrls= true;
-            });
 ## ViewData["myData"]
 ## handler: 
     - Onget(), OnPost
