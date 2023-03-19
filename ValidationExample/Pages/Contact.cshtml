@@ -1,0 +1,46 @@
+﻿@page
+@model ValidationExample.Pages.ContactModel
+@{
+}
+<h1>Lien he</h1>
+<form method="post" asp-page="Contact" class="m-2 p-3 alert-danger" enctype="multipart/form-data">
+	<div asp-validation-summary="All"></div>
+	<div class="form-group">
+		<label asp-for="@Model.customerInfor.CustomerName"></label>
+		<input asp-for="@Model.customerInfor.CustomerName" class="form-control" />
+		<span asp-validation-for="@Model.customerInfor.CustomerName"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="@Model.customerInfor.Email"></label>
+		<input asp-for="@Model.customerInfor.Email" class="form-control" />
+		<span asp-validation-for="@Model.customerInfor.Email"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="@Model.customerInfor.YearOfBirth"></label>
+		<input asp-for="@Model.customerInfor.YearOfBirth" class="form-control" />
+		<span asp-validation-for="@Model.customerInfor.YearOfBirth"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="@Model.FileUpload"></label>
+		<input asp-for="@Model.FileUpload" class="form-control" />
+		<span asp-validation-for="@Model.FileUpload"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="@Model.FileUploads"></label>
+		<input asp-for="@Model.FileUploads" class="form-control" />
+		<span asp-validation-for="@Model.FileUploads"></span>
+	</div>
+	<div class="form-group">
+		<button type="submit" class="btn btn-primary">Gui</button>
+	</div>
+</form>
+<p>@Model.thongbao</p>
+@if (@Model.customerInfor!=null)
+{
+	<p>Thong tin nhan duoc</p>
+	<ul>
+		<li>UserName: @Model.customerInfor.CustomerName</li>
+		<li>Email: @Model.customerInfor.Email</li>
+		<li>Nam sinh: @Model.customerInfor.YearOfBirth</li>
+	</ul>
+}
