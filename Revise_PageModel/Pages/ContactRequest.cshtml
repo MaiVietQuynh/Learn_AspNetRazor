@@ -1,0 +1,29 @@
+﻿@page "contact.html"
+@model ContactRequestModel
+@{
+	ViewData["title"] = "Lien he";
+}
+
+<h1 class="display-4">Trang lien he</h1>
+<p class="lead">Dien cac thong tin lien he</p>
+<hr />
+
+<form class="bg-light p-2 m-2" method="post">
+	<label asp-for="@Model.UserId"></label>
+	<input asp-for="@Model.UserId" />
+	<button class="btn btn-danger" type="submit">Gui</button>
+	<span class="text-danger" asp-validation-for="@Model.UserId"></span>
+</form>
+
+<div class="alert alert-danger">
+	<p>Thong tin lien he</p>
+	<ul>
+		<li>UserId: @Model.UserId</li>
+		<li>UserId: @Model.UserId</li>
+		<li>UserId: @Model.UserId</li>
+	</ul>
+</div>
+
+@section Scripts{
+	<partial name="_ValidationScriptsPartial" />
+}
