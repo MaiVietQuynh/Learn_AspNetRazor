@@ -1,0 +1,66 @@
+@page
+@model EF_Identity.Pages_Blog.IndexModel
+
+@{
+    ViewData["Title"] = "Danh sach bai viet";
+    int i = 0;
+}
+
+<h1>Danh sach bai viet</h1>
+<form method="get" asp-page="./Index">
+    <label > Tim kiem </label>
+    <input name="SearchString" value="" />
+    <button type="submit">Tim</button>
+</form>
+<p>
+    <a asp-page="Create" class="btn btn-primary">Tao bai viet moi</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                STT
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Article[0].Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Article[0].Created)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Article) {
+        <tr>
+            <td>
+                @(++i)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Created)
+            </td>
+
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Chinh sua</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Xem</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Xoa</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@{
+    var pagingModel = new EF_Identity.Helper.PagingModel()
+            {
+                currentPage = Model.currentPage,
+                countPages = Model.countPages,
+                generateUrl = (int? p) => Url.Page("/Blog/Index", new { p = p })
+            };
+}
+
+<partial name="_Paging" model="@pagingModel" />

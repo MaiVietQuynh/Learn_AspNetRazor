@@ -1,0 +1,16 @@
+@page "/xemblog/{id:int}"
+@model EF_Identity.Pages_Blog.DetailsModel
+
+@{
+    ViewData["Title"] = Model.Article.Title;
+}
+
+<h1>@Model.Article.Title</h1>
+<hr />
+<p><i>@Html.DisplayFor(model => model.Article.Created) </i></p>
+@Html.Raw(Model.Article.Content);
+<hr />
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Article.Id">Sua bai viet</a> |
+    <a asp-page="./Index">Danh sach bai viet</a>
+</div>
