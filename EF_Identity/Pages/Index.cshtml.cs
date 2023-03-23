@@ -22,6 +22,7 @@ namespace EF_Identity.Pages
 
 		public void OnGet()
 		{
+			
 			var posts = (from p in _MyBlogContext.Articles 
 						orderby p.Created descending
 						select p).ToList();
