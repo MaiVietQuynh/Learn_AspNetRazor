@@ -1,11 +1,15 @@
-@page
+@page "/can-xac-thuc-email.html/"
 @model RegisterConfirmationModel
 @{
-    ViewData["Title"] = "Register confirmation";
+    ViewData["Title"] = "Thong bao xac thuc email";
 }
 
 <h1>@ViewData["Title"]</h1>
-@{
+
+<p>
+    Ban can truy cap vao email de biet cach xac thuc tai khoan
+</p>
+@*@{
     if (@Model.DisplayConfirmAccountLink)
     {
 <p>
@@ -19,4 +23,4 @@
         Please check your email to confirm your account.
 </p>
     }
-}
+}*@
