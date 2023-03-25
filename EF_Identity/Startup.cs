@@ -39,6 +39,7 @@ namespace EF_Identity
 				options.UseSqlServer(Configuration.GetConnectionString("MyBlogContext"));
 			});
 			services.AddRazorPages();
+
 			//Dang ky Identity
 			services.AddIdentity<AppUser, IdentityRole>()
 				.AddEntityFrameworkStores<MyBlogContext>()
