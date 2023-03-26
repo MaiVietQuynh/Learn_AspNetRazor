@@ -89,7 +89,7 @@
 	- Trong Controller, PageModel, View,.. co san property la User(co kieu ClaimsPrincipal) chua thong tin cua User
 	- Thuoc tinh User nay duoc thiet lap trong moi truy van do 2 middleware la Authorization, Authentication;
 
-###Register
+### Register
 	- Muon truy cap phai dang nhap
 		+ [Authorize]
 		+ 	services.ConfigureApplicationCookie(options =>
@@ -100,7 +100,7 @@
 			});
 		+ Xem Register.cshtml.cs
 
-###Login Logout Reset Passwork Lock Account
+### Login Logout Reset Passwork Lock Account
 	- Co 2 phuong thuc dang nhap:
 		+ _signInManager.SignInAsync
 		+ _signInManager.PasswordSignInAsync
