@@ -46,21 +46,26 @@ namespace EF_Identity.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage ="Phai nhap {0}")]
+            [EmailAddress(ErrorMessage ="Sai dinh dang Email")]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "{0}phai dai tu {2} den {1} ky tu.", MinimumLength = 2)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "Mat Khau")]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Nhap lai Mat Khau")]
+            [Compare("Password", ErrorMessage = "Mat khau khong trung nhau")]
             public string ConfirmPassword { get; set; }
+			[DataType(DataType.Text)]
+			[Display(Name = "Ten tai khoan")]
+			[Required(ErrorMessage = "Phai nhap {0}")]
+			[StringLength(100, ErrorMessage = "{0}phai dai tu {2} den {1} ky tu.", MinimumLength = 3)]
+			public string UserName { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -75,22 +80,27 @@ namespace EF_Identity.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new AppUser { UserName = Input.Email, Email = Input.Email };
+                var user = new AppUser { UserName = Input.UserName, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
+                    _logger.LogInformation("Da tao thanh cong User moi.");
+                    //Phat sinh ra duong link de gui den nguoi dung bam vao xac nhan
 
+                    //Phat sinh token de xac nhan email, khi mo email bam vao link thi se gui token den ung dung va ung dung biet de xac nhan
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    //Duoc Endcode de dinh kem tren Url
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    //Phat sinh Url de goi trang ConfirmEmail
+                    //https://localhost:5001/confirm-email?userId=dffds&code=xyz&returnUrl=returnUrl
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
                         values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
-
+                    //Gui email den User
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                        $"ban da dang ky tai khoan tren RazorWeb, hay <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>bam vao day de kich hoat tai khoan</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
@@ -98,6 +108,7 @@ namespace EF_Identity.Areas.Identity.Pages.Account
                     }
                     else
                     {
+                        //isPersistent: thiet lap cookie de nho tai khoan neu bang true
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }

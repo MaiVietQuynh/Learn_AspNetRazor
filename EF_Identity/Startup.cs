@@ -39,6 +39,7 @@ namespace EF_Identity
 				options.UseSqlServer(Configuration.GetConnectionString("MyBlogContext"));
 			});
 			services.AddRazorPages();
+
 			//Dang ky Identity
 			services.AddIdentity<AppUser, IdentityRole>()
 				.AddEntityFrameworkStores<MyBlogContext>()
@@ -70,7 +71,15 @@ namespace EF_Identity
                 options.SignIn.RequireConfirmedEmail = true;            // Cấu hình xác thực địa chỉ email (email phải tồn tại)
                 options.SignIn.RequireConfirmedPhoneNumber = false;     // Xác thực số điện thoại
 
+				options.SignIn.RequireConfirmedAccount= true;
             });
+
+			services.ConfigureApplicationCookie(options =>
+			{
+				options.LoginPath = "/login/";
+				options.LoginPath = "/logout/";
+				options.AccessDeniedPath = "/khongduoctruycap.html";
+			});
         }
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
