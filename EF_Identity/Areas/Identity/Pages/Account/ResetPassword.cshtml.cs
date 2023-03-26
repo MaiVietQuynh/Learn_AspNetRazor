@@ -49,7 +49,7 @@ namespace EF_Identity.Areas.Identity.Pages.Account
         {
             if (code == null)
             {
-                return BadRequest("A code must be supplied for password reset.");
+                return BadRequest("Ma token khong chinh xac.");
             }
             else
             {

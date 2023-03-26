@@ -31,8 +31,8 @@ namespace EF_Identity.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage ="Phai nhap {0}")]
+            [EmailAddress(ErrorMessage ="Sai dinh dang Email")]
             public string Email { get; set; }
         }
 
@@ -60,7 +60,7 @@ namespace EF_Identity.Areas.Identity.Pages.Account
                 await _emailSender.SendEmailAsync(
                     Input.Email,
                     "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    $"Hay bam <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>vao day</a>de dat lai mat khau.");
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }
