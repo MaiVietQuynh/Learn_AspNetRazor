@@ -12,7 +12,10 @@
 			</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Logout">Dang Xuat</a>
+			@*<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Logout">Dang Xuat</a>*@
+			<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+				<button type="submit" class="nav-link btn-link text-dark">Bam vao day de dang xuat</button>
+			</form>
 		</li>
 	}
 	else

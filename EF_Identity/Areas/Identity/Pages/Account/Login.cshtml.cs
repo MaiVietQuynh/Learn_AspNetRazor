@@ -43,15 +43,16 @@ namespace EF_Identity.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
-            [EmailAddress]
-            public string Email { get; set; }
+            [Required(ErrorMessage ="Phai nhap {0}")]
+            [Display(Name ="Dia chi Email hoac ten Tai khoan")]
+            //[EmailAddress]
+            public string UserNameOrEmail { get; set; }
 
             [Required]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
-            [Display(Name = "Remember me?")]
+            [Display(Name = "Nho thong tin dang nhap?")]
             public bool RememberMe { get; set; }
         }
 
@@ -82,10 +83,19 @@ namespace EF_Identity.Areas.Identity.Pages.Account
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(Input.UserNameOrEmail, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                //Tim UserName theo Email va dang nhap lai
+                if(!result.Succeeded)
+                {
+                    var user = await _userManager.FindByEmailAsync(Input.UserNameOrEmail);
+                    if (user != null)
+                    {
+                        result = await _signInManager.PasswordSignInAsync(user, Input.Password, Input.RememberMe, lockoutOnFailure: true);
+                    }
+                }
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");
+                    _logger.LogInformation("Dang nhap thanh cong.");
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
@@ -94,12 +104,12 @@ namespace EF_Identity.Areas.Identity.Pages.Account
                 }
                 if (result.IsLockedOut)
                 {
-                    _logger.LogWarning("User account locked out.");
+                    _logger.LogWarning("Tai khoan bi khoa.");
                     return RedirectToPage("./Lockout");
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Dang nhap that bai, tai khoan khong ton tai hoac sai usernam, password.");
                     return Page();
                 }
             }

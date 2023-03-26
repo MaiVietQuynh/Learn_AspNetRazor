@@ -35,6 +35,8 @@
 	- dotnet add package Microsoft.AspNetCore.Authentication.OpenIDConnect
 	- dotnet add package Microsoft.AspNetCore.Authentication.Twitter
 ## Identity
+
+### Tong quan
 	- Authentication: Xac dinh danh tinh -> Login,Logout,...
 	- Authorization: Xac thuc quyen truy cap
 	- Quan ly User: Sign Up, Role, User,...
@@ -86,3 +88,21 @@
 			+ @inject UserManager<AppUser> UserManager
 	- Trong Controller, PageModel, View,.. co san property la User(co kieu ClaimsPrincipal) chua thong tin cua User
 	- Thuoc tinh User nay duoc thiet lap trong moi truy van do 2 middleware la Authorization, Authentication;
+
+###Register
+	- Muon truy cap phai dang nhap
+		+ [Authorize]
+		+ 	services.ConfigureApplicationCookie(options =>
+			{
+				options.LoginPath = "/login/";
+				options.LoginPath = "/logout/";
+				options.AccessDeniedPath = "/khongduoctruycap.html";
+			});
+		+ Xem Register.cshtml.cs
+
+###Login Logout Reset Passwork Lock Account
+	- Co 2 phuong thuc dang nhap:
+		+ _signInManager.SignInAsync
+		+ _signInManager.PasswordSignInAsync
+	- Dang nhap sai qua nhieu bi khoa:
+		+ _signInManager.PasswordSignInAsync: lockoutOnFailure: true
