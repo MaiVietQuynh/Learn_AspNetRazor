@@ -3,9 +3,15 @@
 
 @{
     ViewData["Title"] = "Dang nhap";
+    var thongbao = TempData["ErrorMessage"];
 }
 
 <h1>@ViewData["Title"]</h1>
+@if(TempData.ContainsKey("ErrorMessage"))
+{
+    <partial name="/Areas/Identity/Pages/Account/_StatusMessage.cshtml" model="thongbao"/>
+}
+
 <div class="row">
     <div class="col-md-4">
         <section>
@@ -50,15 +56,14 @@
     </div>
     <div class="col-md-6 col-md-offset-2">
         <section>
-            <h4>Use another service to log in.</h4>
+            <h4>Su dung dic vu ngoai.</h4>
             <hr />
             @{
                 if ((Model.ExternalLogins?.Count ?? 0) == 0)
                 {
                     <div>
                         <p>
-                            There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
-                            for details on setting up this ASP.NET application to support logging in via external services.
+                            Chua cau hinh .
                         </p>
                     </div>
                 }
@@ -69,7 +74,7 @@
                             <p>
                                 @foreach (var provider in Model.ExternalLogins)
                                 {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Su dung @provider.DisplayName account">@provider.DisplayName</button>
                                 }
                             </p>
                         </div>
