@@ -62,23 +62,31 @@ namespace EF_Identity.Areas.Identity.Pages.Account
         public IActionResult OnPost(string provider, string returnUrl = null)
         {
             // Request a redirect to the external login provider.
+            // Lay duoc provider tu Login submit
             var redirectUrl = Url.Page("./ExternalLogin", pageHandler: "Callback", values: new { returnUrl });
-            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
-            return new ChallengeResult(provider, properties);
+			// Lay doi tuong kieu AuthenticationProperties(chua ten dich vu, client id, client secret,....)
+			var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+			//Su dung thu vien tuong ung voi provider de ket noi voi dich vu ngoai, tra ve ChallengeResult,
+            //noi dung nay duoc render tren trinh duyet va pop up len 1 cua so de nguoi dung ket noi den dich vu ngoai va cho phep ung dung truy cap den thong tin cua ho,
+            //khi nguoi dung dong y truy cap thi dich vu ngoai se gui ma token den ung dung cua chung ta thong qua dia chi callBack, tren dia chi nay thu vien tuong ung voi provider se lay duoc ma token va tu dong truy cap thong tin ket noi toi tai khoan user,
+            //khi ket noi va lay duoc thong tin user thi se tu dong chuyen huong ve trang ma ta thiet lap o redirectUrl, thong tin lay duoc luu vvao section cua ung dung, luc nay o cac trang truy cap khac co the doc lai duoc thong tin nay
+			return new ChallengeResult(provider, properties);
         }
 
         public async Task<IActionResult> OnGetCallbackAsync(string returnUrl = null, string remoteError = null)
         {
+            ErrorMessage = "Khong lay duoc thong tin tu dich vu ngoai.";
+            return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             returnUrl = returnUrl ?? Url.Content("~/");
             if (remoteError != null)
             {
-                ErrorMessage = $"Error from external provider: {remoteError}";
+                ErrorMessage = $"Loi tu dich vu ngoai: {remoteError}";
                 return RedirectToPage("./Login", new {ReturnUrl = returnUrl });
             }
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
-                ErrorMessage = "Error loading external login information.";
+                ErrorMessage = "Khong lay duoc thong tin tu dich vu ngoai.";
                 return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
 

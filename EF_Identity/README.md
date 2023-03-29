@@ -106,3 +106,28 @@
 		+ _signInManager.PasswordSignInAsync
 	- Dang nhap sai qua nhieu bi khoa:
 		+ _signInManager.PasswordSignInAsync: lockoutOnFailure: true
+
+
+### Google Facebook Login
+	- Đăng ký dịch vụ xác thực từ Google - OAuth của Google: https://console.developers.google.com/
+	- Cau hinh appsettings.json:
+		+   "Authentication": {
+				"Google": {
+				  "ClientId": "891070304210-vtnv61d8v1ot977bk441gf0ivvfc68c6.apps.googleusercontent.com",
+				  "ClientSecret": "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"
+				}
+		}
+	- Dang ky vao startup:
+		+ services.AddAuthentication()
+				.AddGoogle(option =>
+				{
+					var googleConfig = Configuration.GetSection("Authentication:Google");
+					option.ClientId = googleConfig["ClientId"];
+					option.ClientSecret = googleConfig["ClientSecret"];
+					option.CallbackPath= "/dang-nhap-tu-google";
+					//CallbackPath mac dinh : https://localhost:5001/signin-google
+				});
+	- Class Register.cshtml.cs:
+		+ De lay cac provider(la cac dich vu ngoai), ta goi: _signInManager.GetExternalAuthenticationSchemesAsync() ->  Tra ve tap hop AuthenticationScheme(Chua thong tin ve provider)
+	- Xem Class Login->ExternalLogin
+	- 
