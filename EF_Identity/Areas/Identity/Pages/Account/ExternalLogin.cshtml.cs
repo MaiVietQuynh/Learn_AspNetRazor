@@ -75,14 +75,14 @@ namespace EF_Identity.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnGetCallbackAsync(string returnUrl = null, string remoteError = null)
         {
-            ErrorMessage = "Khong lay duoc thong tin tu dich vu ngoai.";
-            return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
+           
             returnUrl = returnUrl ?? Url.Content("~/");
             if (remoteError != null)
             {
                 ErrorMessage = $"Loi tu dich vu ngoai: {remoteError}";
                 return RedirectToPage("./Login", new {ReturnUrl = returnUrl });
             }
+            // info chua thong tin nguoi dung tu dich vu ngoai
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
@@ -94,6 +94,7 @@ namespace EF_Identity.Areas.Identity.Pages.Account
             var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor : true);
             if (result.Succeeded)
             {
+                // Dang nhap thanh cong khi ung dung da co mot account(duoc lien ket voi dich vu ngoai la LoginProvider(vd google))
                 _logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
                 return LocalRedirect(returnUrl);
             }
@@ -103,6 +104,8 @@ namespace EF_Identity.Areas.Identity.Pages.Account
             }
             else
             {
+                // Co tai khoan nhung chua lien ket voi dich vu ngoai Google -> Lien ket dich vu ngoai
+                // Chua co tai khoan -> Tao tai khoan, lien ket dich vu ngoai, dang nhap
                 // If the user does not have an account, then ask the user to create an account.
                 ReturnUrl = returnUrl;
                 ProviderDisplayName = info.ProviderDisplayName;
@@ -124,12 +127,81 @@ namespace EF_Identity.Areas.Identity.Pages.Account
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
-                ErrorMessage = "Error loading external login information during confirmation.";
+                ErrorMessage = "Loi lay thong tin tu dich vu ngoai.";
                 return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
 
             if (ModelState.IsValid)
             {
+
+                var registeredUser = await _userManager.FindByEmailAsync(Input.Email);
+                //var info = await _signInManager.GetExternalLoginInfoAsync();
+                string externalEmail = null;
+                AppUser externalEmailUser = null;
+                //Kiem tra info co cung cap dia chi Email khong
+                // Tim trong Principal xem co cac claim co claim type bang email khong
+                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
+                {
+                    externalEmail = info.Principal.FindFirstValue(ClaimTypes.Email);
+                }
+                if (externalEmail != null)
+                {
+                    externalEmailUser = await _userManager.FindByEmailAsync(externalEmail);
+                }
+                if ((registeredUser != null) && (externalEmailUser != null))
+                {
+                    // Input.Email==externalEmail
+                    if (registeredUser.Id == externalEmailUser.Id)
+                    {
+                        // Lien ket tai khoan -> dang nhap
+                        var resultLink = await _userManager.AddLoginAsync(registeredUser, info);
+                        if (resultLink.Succeeded)
+                        {
+                            await _signInManager.SignInAsync(registeredUser, isPersistent: false);
+                            return LocalRedirect(returnUrl);
+                        }
+                    }
+                    else
+                    {
+                        // Input.Email!=externalEmail
+                        /*
+                         * info -> user1(email1@gmail.com)
+                         *      -> user2(email2@gmail.com)
+                         */
+                        ModelState.AddModelError(string.Empty, "Khong lien ket duoc tai khoan, hay su dung email khac");
+                        return Page();
+                    }
+
+                }
+                if(externalEmailUser !=null && registeredUser==null)
+                {
+                    ModelState.AddModelError(string.Empty, "Khong ho tro tao tai khoan co email khac voi email tao tu dich vu ngoai");
+                    return Page();
+                }
+                if(externalEmailUser==null && externalEmail==Input.Email)
+                {
+                    // chua co account
+                    var newUser = new AppUser
+                    {
+                        Email = externalEmail,
+                        UserName = externalEmail,
+                    };
+                    var resultNewUser = await _userManager.CreateAsync(newUser);
+                    if(resultNewUser.Succeeded)
+                    {
+                        await _userManager.AddLoginAsync(newUser, info);
+                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
+                        await _userManager.ConfirmEmailAsync(newUser, code);
+                        await _signInManager.SignInAsync(newUser,isPersistent: false);
+                        return LocalRedirect(returnUrl);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Khong tao duoc tai khoan moi");
+                        return Page();
+                    }
+                }
+
                 var user = new AppUser { UserName = Input.Email, Email = Input.Email };
 
                 var result = await _userManager.CreateAsync(user);

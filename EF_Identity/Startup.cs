@@ -82,15 +82,23 @@ namespace EF_Identity
 			});
 
 			services.AddAuthentication()
-				.AddGoogle(option =>
+				.AddGoogle(googleOption =>
 				{
-					var googleConfig = Configuration.GetSection("Authentication:Google");
-					option.ClientId = googleConfig["ClientId"];
-					option.ClientSecret = googleConfig["ClientSecret"];
-					option.CallbackPath= "/dang-nhap-tu-google";
+                    IConfigurationSection googleConfig = Configuration.GetSection("Authentication:Google");
+                    googleOption.ClientId = googleConfig["ClientId"];
+                    googleOption.ClientSecret = googleConfig["ClientSecret"];
+                    googleOption.CallbackPath = "/dang-nhap-tu-google";
 					//CallbackPath mac dinh : https://localhost:5001/signin-google
+				})
+				.AddFacebook(facebookOptions =>
+				{
+                    IConfigurationSection facebookConfig = Configuration.GetSection("Authentication:Facebook");
+                    facebookOptions.AppId = facebookConfig["AppId"];
+                    facebookOptions.AppSecret = facebookConfig["AppSecret"];
+                    facebookOptions.CallbackPath = "/dang-nhap-tu-facebook";
+					
 				});
-        }
+		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
