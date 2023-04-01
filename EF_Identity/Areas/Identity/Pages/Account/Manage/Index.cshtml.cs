@@ -4,12 +4,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using EF_Identity.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EF_Identity.Areas.Identity.Pages.Account.Manage
 {
+    [Authorize]
     public partial class IndexModel : PageModel
     {
         private readonly UserManager<AppUser> _userManager;
@@ -33,9 +35,15 @@ namespace EF_Identity.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
-            [Phone]
-            [Display(Name = "Phone number")]
+            [Phone(ErrorMessage ="{0} sai dinh dang")]
+            [Display(Name = "So dien thoai")]
             public string PhoneNumber { get; set; }
+            [StringLength(400)]
+            [Display(Name = "Dia chi")]
+            public string HomeAddress { get; set; }
+            [Display(Name = "Ngay sinh")]
+
+            public DateTime? BirthDate { get; set; }
         }
 
         private async Task LoadAsync(AppUser user)
@@ -47,7 +55,9 @@ namespace EF_Identity.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                BirthDate=user.Birthdate,
+                HomeAddress= user.HomeAddress
             };
         }
 
@@ -77,19 +87,24 @@ namespace EF_Identity.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            if (Input.PhoneNumber != phoneNumber)
-            {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
-                if (!setPhoneResult.Succeeded)
-                {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
-                    return RedirectToPage();
-                }
-            }
+            //var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            //if (Input.PhoneNumber != phoneNumber)
+            //{
+            //    var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
+            //    if (!setPhoneResult.Succeeded)
+            //    {
+            //        StatusMessage = "Unexpected error when trying to set phone number.";
+            //        return RedirectToPage();
+            //    }
+            //}
+            user.HomeAddress=Input.HomeAddress;
+            user.PhoneNumber=Input.PhoneNumber;
+            user.Birthdate=Input.BirthDate;
+            await _userManager.UpdateAsync(user);
+            await _signInManager.RefreshSignInAsync(user);
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
+            StatusMessage = "Ho so cua ban duoc cap nhat";
             return RedirectToPage();
         }
     }
