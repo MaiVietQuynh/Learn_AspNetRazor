@@ -4,12 +4,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using EF_Identity.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 namespace EF_Identity.Areas.Identity.Pages.Account.Manage
 {
+    [Authorize]
     public class ChangePasswordModel : PageModel
     {
         private readonly UserManager<AppUser> _userManager;
@@ -36,18 +38,18 @@ namespace EF_Identity.Areas.Identity.Pages.Account.Manage
         {
             [Required]
             [DataType(DataType.Password)]
-            [Display(Name = "Current password")]
+            [Display(Name = "Mat khau hien tai")]
             public string OldPassword { get; set; }
 
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "{0}phai dai tu {2} den {1} ky tu.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "New password")]
+            [Display(Name = "Mat khau moi")]
             public string NewPassword { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm new password")]
-            [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+            [Display(Name = "Nhap lai mat khau moi")]
+            [Compare("NewPassword", ErrorMessage = "Lap lai mat khau khong chinh xac.")]
             public string ConfirmPassword { get; set; }
         }
 
@@ -93,7 +95,7 @@ namespace EF_Identity.Areas.Identity.Pages.Account.Manage
 
             await _signInManager.RefreshSignInAsync(user);
             _logger.LogInformation("User changed their password successfully.");
-            StatusMessage = "Your password has been changed.";
+            StatusMessage = "Doi mat khau thanh cong.";
 
             return RedirectToPage();
         }
