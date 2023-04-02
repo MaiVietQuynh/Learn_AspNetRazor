@@ -14,7 +14,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Revise_PageModel", "Revise_
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ValidationExample", "ValidationExample\ValidationExample.csproj", "{FEF1DF62-755C-4B54-B966-BF73FFEE5C6E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF_Identity", "EF_Identity\EF_Identity.csproj", "{03BB7F35-90E1-402A-863C-27459603A0B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EF_Identity", "EF_Identity\EF_Identity.csproj", "{03BB7F35-90E1-402A-863C-27459603A0B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
