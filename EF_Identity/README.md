@@ -130,4 +130,8 @@
 	- Class Register.cshtml.cs:
 		+ De lay cac provider(la cac dich vu ngoai), ta goi: _signInManager.GetExternalAuthenticationSchemesAsync() ->  Tra ve tap hop AuthenticationScheme(Chua thong tin ve provider)
 	- Xem Class Login->ExternalLogin
-	- 
+
+### Role
+	- Role-based authorization
+		+ Role(Vai tro): Admin, Editor,....
+		+ 
