@@ -1,28 +1,38 @@
-﻿@page "/admin/roles"
-@model EF_Identity.Areas.Admin.Pages.Role.IndexModel
+﻿@page "/admin/members"
+@model EF_Identity.Areas.Admin.Pages.User.IndexModel
 @{
-	ViewData["Title"] = "Danh sach cac Role";
+	ViewData["Title"] = "Danh sach cac thanh vien";
 }
 <h2>@ViewData["Title"]</h2>
-<div class="mb-2">
-	<a class="btn btn-secondary" asp-page="./Create">Tao Role moi</a>
-</div>
+
 <partial name="_StatusMessage" model="@Model.StatusMessage"></partial>
+<P>Tong so thanh vien: @Model.totalUsers</P>
 <table class="table">
 	<tr>
-		<th>Ten Role(Vai tro)</th>
+		<th>Ten User</th>
+		<th>Vai tro(Role)</th>
 		<th>Tac vu</th>
 	</tr>
-	@foreach(var role in Model.roles)
+	@foreach(var user in Model.users)
 	{
 		<tr>
-			<td>@role.Name</td>
+			<td>@user.UserName</td>
+			<td></td>
 			<td>
-				<a class="btn btn-success btn-sm" asp-page="./Edit" asp-route-roleid="@role.Id">Cap nhat</a>
-				<a class="btn btn-success btn-sm" asp-page="./Delete" asp-route-roleid="@role.Id">Xoa</a>
+				<a class="btn btn-success btn-sm" asp-page="./AddRole" asp-route-id="@user.Id">Cap nhat</a>
 			</td>
 		</tr>
-
-
 	}
 </table>
+@{
+	var pagingModel = new EF_Identity.Helper.PagingModel()
+			{
+				currentPage = Model.currentPage,
+				countPages = Model.countPages,
+				generateUrl = (int? p) => Url.Page("./Index", new { p = p })
+			};
+}
+
+<partial name="_Paging" model="@pagingModel" />
+
+

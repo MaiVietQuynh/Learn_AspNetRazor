@@ -1,0 +1,28 @@
+﻿@page "/admin/roles"
+@model EF_Identity.Areas.Admin.Pages.Role.IndexModel
+@{
+	ViewData["Title"] = "Danh sach cac Role";
+}
+<h2>@ViewData["Title"]</h2>
+<div class="mb-2">
+	<a class="btn btn-secondary" asp-page="./Create">Tao Role moi</a>
+</div>
+<partial name="_StatusMessage" model="@Model.StatusMessage"></partial>
+<table class="table">
+	<tr>
+		<th>Ten Role(Vai tro)</th>
+		<th>Tac vu</th>
+	</tr>
+	@foreach(var role in Model.roles)
+	{
+		<tr>
+			<td>@role.Name</td>
+			<td>
+				<a class="btn btn-success btn-sm" asp-page="./Edit" asp-route-roleid="@role.Id">Cap nhat</a>
+				<a class="btn btn-success btn-sm" asp-page="./Delete" asp-route-roleid="@role.Id">Xoa</a>
+			</td>
+		</tr>
+
+
+	}
+</table>

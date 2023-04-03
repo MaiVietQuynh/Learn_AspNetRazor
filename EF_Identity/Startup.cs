@@ -98,6 +98,7 @@ namespace EF_Identity
                     facebookOptions.CallbackPath = "/dang-nhap-tu-facebook";
 					
 				});
+			services.AddSingleton<IdentityErrorDescriber, AppIdentityErrorDescriber>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
