@@ -1,7 +1,7 @@
-﻿@page "/admin/add-role"
-@model EF_Identity.Areas.Admin.Pages.Role.CreateModel
+﻿@page "/admin/edit-role/{roleid}"
+@model EF_Identity.Areas.Admin.Pages.Role.EditModel
 @{
-	ViewData["Title"] = "Tao cac Role moi";
+	ViewData["Title"] = "Cap nhat Role";
 }
 <h2>@ViewData["Title"]</h2>
 
@@ -18,10 +18,8 @@
             </div>
 
             <div class="form-group">
-                <input type="submit" value="Tao moi" class="btn btn-primary" />
-                <a class="btn btn-primary" asp-page="./Index">Danh sach cac Role</a>
+                <input type="submit" value="Cap nhat" class="btn btn-primary" />
             </div>
-
         </form>
     </div>
 </div>

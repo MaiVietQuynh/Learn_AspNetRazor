@@ -134,4 +134,6 @@
 ### Role
 	- Role-based authorization
 		+ Role(Vai tro): Admin, Editor,....
-		+ 
+	- Tuy bien thong bao loi Identity
+		+ Trong RoleManager co inject IdentityErrorDescriber, implement nó để tùy biến
+		+ Dang ky AppIdentityErrorDescriber vao Starup
