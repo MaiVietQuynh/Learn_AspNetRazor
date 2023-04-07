@@ -8,7 +8,7 @@ namespace EF_Identity.Areas.Admin.Pages.Role
     public class RolePageModel : PageModel
     {
         protected readonly RoleManager<IdentityRole> _roleManager;
-        private readonly MyBlogContext _context;
+		protected readonly MyBlogContext _context;
         [TempData]
         public string StatusMessage { get; set; }
         public RolePageModel(RoleManager<IdentityRole> roleManager, MyBlogContext myBlogContext)

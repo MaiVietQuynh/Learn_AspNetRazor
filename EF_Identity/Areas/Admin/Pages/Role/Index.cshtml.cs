@@ -10,17 +10,34 @@ using System.Threading.Tasks;
 
 namespace EF_Identity.Areas.Admin.Pages.Role
 {
-    [Authorize(Roles="admin")]
+    [Authorize(Roles="Admin")]
     public class IndexModel : RolePageModel
     {
         public IndexModel(RoleManager<IdentityRole> roleManager, MyBlogContext myBlogContext) : base(roleManager, myBlogContext)
         {
 
         }
-        public List<IdentityRole> roles { get; set; }
+        public class RoleModel : IdentityRole
+        {
+            public string[] Claims { get; set; }
+        }
+        public List<RoleModel> roles { get; set; }
         public async Task OnGet()
         {
-            roles = await _roleManager.Roles.OrderBy(r=>r.Name).ToListAsync();
+            var r = await _roleManager.Roles.OrderBy(r=>r.Name).ToListAsync();
+            roles = new List<RoleModel>();
+            foreach (var _r in r)
+            {
+                var claims = await _roleManager.GetClaimsAsync(_r);
+                var claimString = claims.Select(c => c.Type + "=" + c.Value);
+                var rm = new RoleModel()
+                {
+                    Name= _r.Name,
+                    Id= _r.Id,
+                    Claims = claimString.ToArray()
+                };
+                roles.Add(rm);
+            }
         }
         public void OnPost()
         {

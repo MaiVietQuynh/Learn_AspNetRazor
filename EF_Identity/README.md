@@ -132,8 +132,16 @@
 	- Xem Class Login->ExternalLogin
 
 ### Role
+
+#### Role-based authorization
 	- Role-based authorization
 		+ Role(Vai tro): Admin, Editor,....
 	- Tuy bien thong bao loi Identity
 		+ Trong RoleManager co inject IdentityErrorDescriber, implement nó để tùy biến
 		+ Dang ky AppIdentityErrorDescriber vao Starup
+#### Police-based authorization
+	- Dang ky trong Starup
+#### Claims-based authorization
+	- IdentityRoleClaim<string> claim1 -> DbContext
+	- IdentityUserClaim<string> claim2 -> DbContext
+	- Claim claim3 -> Dich vu Identity

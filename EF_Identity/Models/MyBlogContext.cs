@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Threading.Tasks;
 
 namespace EF_Identity.Models
 {
@@ -27,6 +30,12 @@ namespace EF_Identity.Models
 			}
 
 		}
-		public DbSet<Article> Articles { get; set; }
+
+        internal Task<IdentityRole> FindAsync(string roleId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DbSet<Article> Articles { get; set; }
 	}
 }
