@@ -99,6 +99,18 @@ namespace EF_Identity
 					
 				});
 			services.AddSingleton<IdentityErrorDescriber, AppIdentityErrorDescriber>();
+			services.AddAuthorization(options =>
+			{
+				options.AddPolicy("AllowEditRole", policyBuilder =>
+				{
+					policyBuilder.RequireAuthenticatedUser();
+					policyBuilder.RequireRole("Admin");
+                    //policyBuilder.RequireRole("Editor");
+                    //policyBuilder.RequireClaim("manager.role", "add", "update");
+                    policyBuilder.RequireClaim("canedit", "User");
+                });
+			});
+
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

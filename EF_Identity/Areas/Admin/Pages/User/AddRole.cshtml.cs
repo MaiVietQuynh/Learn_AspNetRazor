@@ -18,14 +18,17 @@ namespace EF_Identity.Areas.Admin.Pages.User
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly MyBlogContext _context;
         public AddRoleModel(
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            MyBlogContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _context = context;
         }
 
         [TempData]
@@ -35,6 +38,23 @@ namespace EF_Identity.Areas.Admin.Pages.User
         [DisplayName("Cac role gan cho User")]
         public string[] RoleNames { get; set; }
         public SelectList allRoles { get; set; }
+        public List<IdentityRoleClaim<string>> claimsInRole { get; set; }
+        public List<IdentityUserClaim<string>> claimsInUserClaim { get; set; }
+        async Task GetClaims(string id)
+        {
+            var listRoles = from r in _context.Roles
+                            join ur in _context.UserRoles on r.Id equals ur.RoleId
+                            where ur.UserId == id
+                            select r;
+            var _claimsInRole = from c in _context.RoleClaims
+                                join r in listRoles on c.RoleId equals r.Id
+                                select c;
+            claimsInRole = await _claimsInRole.ToListAsync();
+
+            claimsInUserClaim = await (from c in _context.UserClaims
+                                       where c.UserId == id
+                                       select c).ToListAsync();
+        }
         public async Task<IActionResult> OnGetAsync(string id)
         {
             if(string.IsNullOrEmpty(id))
@@ -46,9 +66,14 @@ namespace EF_Identity.Areas.Admin.Pages.User
             {
                 return NotFound($"Khong thay User co Id={id}");
             }
+
+            await GetClaims(id);
+
             RoleNames = (await _userManager.GetRolesAsync(user)).ToArray<string>();
             List<string> roleNames = await _roleManager.Roles.Select(r => r.Name).ToListAsync();
             allRoles = new SelectList(roleNames);
+
+            await GetClaims(id);
 
             return Page();
         }

@@ -1,7 +1,9 @@
 using EF_Identity.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -9,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace EF_Identity.Areas.Admin.Pages.Role
 {
+	[Authorize(Policy ="AllowEditRole")]
 	public class EditModel : RolePageModel
 	{
 		public EditModel(RoleManager<IdentityRole> roleManager, MyBlogContext myBlogContext) : base(roleManager, myBlogContext)
@@ -25,6 +28,7 @@ namespace EF_Identity.Areas.Admin.Pages.Role
 		[BindProperty]
 		public InputModel Input { get; set; }
 		public IdentityRole role { get; set; }
+		public List<IdentityRoleClaim<string>> Claims { get; set; }
 
 		public async Task<IActionResult> OnGetAsync(string roleid)
 		{
@@ -37,6 +41,7 @@ namespace EF_Identity.Areas.Admin.Pages.Role
 				{
 					Name = role.Name
 				};
+				Claims = _context.RoleClaims.Where(rc => rc.RoleId == role.Id).ToList();
 				return Page();
 			}
 			return NotFound("Khong tim thay Role");
@@ -52,7 +57,8 @@ namespace EF_Identity.Areas.Admin.Pages.Role
 			{
                 return NotFound("Khong tim thay role");
             }
-            if (!ModelState.IsValid)
+			Claims = _context.RoleClaims.Where(rc => rc.RoleId == role.Id).ToList();
+			if (!ModelState.IsValid)
 			{
 				return Page();
 			}
