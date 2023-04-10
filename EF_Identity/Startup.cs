@@ -1,5 +1,7 @@
 ﻿using EF_Identity.Models;
+using EF_Identity.Security.Requirements;
 using EF_Identity.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -109,8 +111,20 @@ namespace EF_Identity
                     //policyBuilder.RequireClaim("manager.role", "add", "update");
                     policyBuilder.RequireClaim("canedit", "User");
                 });
+				options.AddPolicy("InGenZ", policyBuilder =>
+				{
+					policyBuilder.Requirements.Add(new GenZRequirement());
+				});
+				options.AddPolicy("ShowAdminMenu", policyBuilder =>
+				{
+					policyBuilder.RequireRole("Admin");
+				});
+				options.AddPolicy("CanUpdateArticle", policyBuilder =>
+				{
+					policyBuilder.Requirements.Add(new ArticleUpdateRequirement());
+				});
 			});
-
+			services.AddTransient<IAuthorizationHandler, AppAuthorizationhandler>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

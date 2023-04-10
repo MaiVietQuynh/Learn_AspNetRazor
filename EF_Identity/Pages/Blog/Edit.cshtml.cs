@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EF_Identity.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EF_Identity.Pages_Blog
 {
     public class EditModel : PageModel
     {
         private readonly EF_Identity.Models.MyBlogContext _context;
+        private readonly IAuthorizationService _authorizationService;
 
-        public EditModel(EF_Identity.Models.MyBlogContext context)
+        public EditModel(EF_Identity.Models.MyBlogContext context, IAuthorizationService authorizationService)
         {
             _context = context;
+            _authorizationService = authorizationService;
         }
 
         [BindProperty]
@@ -51,7 +54,17 @@ namespace EF_Identity.Pages_Blog
 
             try
             {
-                await _context.SaveChangesAsync();
+                //Kiem tra quyen cap nhat
+                var canUpdate= await _authorizationService.AuthorizeAsync(this.User,Article, "CanUpdateArticle");
+                if (canUpdate.Succeeded)
+                {
+					await _context.SaveChangesAsync();
+				}   
+                else
+                {
+					return Content("Khong duoc quyen cap nhat");
+				}
+                   
             }
             catch (DbUpdateConcurrencyException)
             {

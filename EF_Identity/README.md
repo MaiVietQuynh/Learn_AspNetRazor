@@ -145,3 +145,13 @@
 	- IdentityRoleClaim<string> claim1 -> DbContext
 	- IdentityUserClaim<string> claim2 -> DbContext
 	- Claim claim3 -> Dich vu Identity
+#### IAuthorizationService
+	- Tao Requirements
+		+ Tao 1 class ke thua IAuthorizationRequirement
+	- Khi he thong kiem tra User theo Requirement thi phai tim tren he thong 1 dich vu nao do chuyen xu ly nhung doi tuong Requirement do
+	- Tao dich vu xu ly Requirements
+		+  IAuthorization handler -> Tao 1 class implement tu IAuthorizationHandler
+		+ Dang ky dich vu vao he thong
+		+ Thong tin chuyen den AuthorizationHandler duoc chua trong context
+		+ context.PendingRequirements: Cac requirements chua xu ly
+		+ context.Resource: La mot doi tuong bat ky nao do, trong cach xac thuc su dung Authorize thi Resource la HttpContextDefault
